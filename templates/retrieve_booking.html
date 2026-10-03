@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Retrieve Booking{% endblock %}
+
+{% block extra_css %}
+<style>
+    .retrieve-container {
+        max-width: 600px;
+        margin: 5rem auto;
+        padding: 0 1rem;
+    }
+    
+    .retrieve-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .retrieve-header h1 {
+        color: var(--primary-blue);
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .retrieve-header p {
+        color: var(--primary-grey);
+        font-size: 1.125rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .retrieve-card {
+        background-color: var(--white);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background-color: var(--primary-blue);
+        padding: 1.5rem;
+        position: relative;
+    }
+    
+    .card-header h2 {
+        color: var(--white);
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .card-header h2 i {
+        font-size: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 2.5rem;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 0.875rem 1.25rem;
+        font-size: 1.125rem;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+        color: var(--dark-grey);
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(85, 153, 255, 0.25);
+        background-color: var(--white);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: var(--dark-grey);
+        font-size: 1rem;
+    }
+    
+    .btn-retrieve {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        font-weight: 600;
+        border-radius: 8px;
+        font-size: 1.125rem;
+        width: 100%;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .btn-retrieve:hover {
+        background-color: var(--accent-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(19, 54, 108, 0.2);
+    }
+    
+    .retrieve-footer {
+        margin-top: 2rem;
+        text-align: center;
+        color: var(--primary-grey);
+    }
+    
+    .retrieve-footer a {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .retrieve-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    .illustration {
+        width: 250px;
+        margin: 0 auto 2rem;
+        display: block;
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="retrieve-container">
+    <div class="retrieve-header">
+        <h1>Retrieve Your Booking</h1>
+        <p>Enter your booking number to view or modify your existing reservation.</p>
+    </div>
+    
+    <div class="retrieve-card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-search"></i>
+                Booking Lookup
+            </h2>
+        </div>
+        <div class="card-body">
+            <!-- Illustration -->
+            <img src="https://cdn.jsdelivr.net/gh/iconic/open-iconic@1.1.1/svg/magnifying-glass.svg" alt="Illustration" class="illustration">
+            
+            <form action="{{ url_for('retrieve_booking') }}" method="POST">
+                <div class="mb-3">
+                    <label for="booking_number" class="form-label">Booking Number</label>
+                    <input type="text" class="form-control" id="booking_number" name="booking_number" placeholder="Enter your booking number" required>
+                </div>
+                
+                <button type="submit" class="btn-retrieve">
+                    <i class="fas fa-search"></i>
+                    Retrieve Booking
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="retrieve-footer">
+        <p>Don't have a booking yet? <a href="{{ url_for('form') }}">Make a new booking</a></p>
+    </div>
+</div>
+{% endblock %}

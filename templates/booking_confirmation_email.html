@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        h2 {
+            color: #007bff;
+        }
+        p {
+            font-size: 16px;
+        }
+        .details {
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Booking Confirmation</h2>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        <p>Thank you for your inquiry. We have received your request for booking the <strong>{{ selected_resource }}</strong> from <strong>{{ start_date }}</strong> to <strong>{{ end_date }}</strong>.</p>
+
+        <h3>Booking Details:</h3>
+        <ul>
+            <li><strong>Event Title:</strong> {{ event_title }}</li>
+            <li><strong>Resource:</strong> {{ selected_resource }}</li>
+            <li><strong>Participants:</strong> {{ participants }}</li>
+            <li><strong>Start Date:</strong> {{ start_date }} {{ start_time }}</li>
+            <li><strong>End Date:</strong> {{ end_date }} {{ end_time }}</li>
+            <li><strong>Contact Person:</strong> {{ contact_person }}</li>
+        </ul>
+
+        <h3>Additional Info:</h3>
+        <p>{{ additional_info }}</p>
+
+        <h3>Inventory and Services:</h3>
+        <ul>
+            <li><strong>Inventory:</strong> {{ inventory_details }}</li>
+            <li><strong>Services:</strong> {{ services_selected }}</li>
+        </ul>
+
+        <h3>Cleaning Charge:</h3>
+        <p>€{{ cleaning_charge }}</p>
+
+
+        <h3>Your Booking Number:</h3>
+        <p><strong>{{ booking_number }}</strong></p>
+
+        <div class="footer">
+            <p>We will review your inquiry and get back to you shortly.</p>
+            <p>Best regards,<br>The Team</p>
+        </div>
+    </div>
+</body>
+</html>

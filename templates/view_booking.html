@@ -1,0 +1,725 @@
+{% extends "base.html" %}
+
+{% block title %}Modify Your Booking{% endblock %}
+
+{% block extra_css %}
+<style>
+    .booking-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .booking-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .booking-header h1 {
+        font-weight: 700;
+        color: var(--primary-blue);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .booking-header .booking-number {
+        font-size: 1.125rem;
+        color: var(--primary-grey);
+        margin-top: 0.5rem;
+    }
+    
+    .booking-number-badge {
+        background-color: var(--primary-blue);
+        color: white;
+        font-weight: 600;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        letter-spacing: 1px;
+    }
+    
+    .form-section {
+        background-color: var(--white);
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .section-header {
+        padding: 1.25rem 1.5rem;
+        background-color: var(--primary-blue);
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .section-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .section-header i {
+        font-size: 1.5rem;
+    }
+    
+    .section-body {
+        padding: 2rem;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+        color: var(--dark-grey);
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(85, 153, 255, 0.25);
+        background-color: var(--white);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--dark-grey);
+        font-size: 0.9375rem;
+    }
+    
+    .input-group-text {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: var(--primary-grey);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .btn-update {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.125rem;
+    }
+    
+    .btn-update:hover {
+        background-color: var(--accent-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(19, 54, 108, 0.2);
+    }
+    
+    .btn-cancel {
+        background-color: #fff0f1;
+        color: #e03131;
+        border: 1px solid #e03131;
+        padding: 0.875rem 2rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.125rem;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #e03131;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(224, 49, 49, 0.2);
+    }
+    
+    .inventory-card {
+        background-color: #f8fafc;
+        border-radius: 10px;
+        padding: 1.25rem;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+        height: 100%;
+    }
+    
+    .inventory-card:hover {
+        border-color: var(--accent-blue);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .inventory-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--dark-grey);
+    }
+    
+    .inventory-max {
+        color: var(--primary-grey);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+    
+    .service-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    
+    .service-item:hover {
+        background-color: #f1f5f9;
+    }
+    
+    .service-item .form-check-input {
+        cursor: pointer;
+    }
+    
+    .service-item .form-check-label {
+        cursor: pointer;
+        font-weight: 500;
+    }
+    
+    .detail-card {
+        background-color: #f8fafc;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .detail-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .detail-card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--dark-grey);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .detail-card-title i {
+        color: var(--primary-blue);
+    }
+    
+    .legal-section {
+        background-color: #f8fafc;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .legal-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--dark-grey);
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .legal-title i {
+        color: var(--primary-blue);
+    }
+    
+    .legal-check {
+        margin-bottom: 1rem;
+    }
+    
+    .legal-link {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .legal-link:hover {
+        text-decoration: underline;
+    }
+    
+    .time-fields-container {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-container">
+    <div class="booking-header">
+        <h1><i class="fas fa-edit text-primary"></i> Modify Your Booking</h1>
+        <div class="booking-number">
+            Booking Number: <span class="booking-number-badge">{{ booking.booking_number }}</span>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('modify_booking', booking_number=booking.booking_number) }}">
+        <input type="hidden" name="booking_number" value="{{ booking.booking_number }}">
+
+        <!-- Personal Details -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-user-circle"></i>
+                <h2>Personal Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ booking.first_name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ booking.last_name }}" required>
+                    </div>
+                </div>
+                
+                <div class="row g-4 mt-3">
+                    <div class="col-md-4">
+                        <label for="academic_title" class="form-label">Academic Title</label>
+                        <input type="text" class="form-control" id="academic_title" name="academic_title" value="{{ booking.academic_title }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="organization" class="form-label">Organization</label>
+                        <input type="text" class="form-control" id="organization" name="organization" value="{{ booking.organization }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ booking.email }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" name="address" rows="3">{{ booking.address }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Details -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-calendar-alt"></i>
+                <h2>Event Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="mb-4">
+                    <label for="event_title" class="form-label">Event Title</label>
+                    <input type="text" class="form-control" id="event_title" name="event_title" value="{{ booking.event_title }}" required>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-calendar"></i> Date Range
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ booking.start_date }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ booking.end_date }}" required>
+                                </div>
+                            </div>
+                            <div class="form-check mt-3">
+                                <input type="checkbox" class="form-check-input" id="full_day" name="full_day" onclick="toggleTimeFields()" {% if booking.full_day %} checked {% endif %}>
+                                <label class="form-check-label" for="full_day">Whole Day</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="detail-card time-fields-container">
+                            <div class="detail-card-title">
+                                <i class="fas fa-clock"></i> Time Range
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6 time-field">
+                                    <label for="start_time" class="form-label">Start Time</label>
+                                    <input type="time" class="form-control" id="start_time" name="start_time" value="{{ booking.start_time }}">
+                                </div>
+                                <div class="col-md-6 time-field">
+                                    <label for="end_time" class="form-label">End Time</label>
+                                    <input type="time" class="form-control" id="end_time" name="end_time" value="{{ booking.end_time }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Selection -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-door-open"></i>
+                <h2>Room Selection</h2>
+            </div>
+            <div class="section-body">
+                <label for="resource" class="form-label">Select a Room</label>
+                <select class="form-select" name="resource" id="resource" onchange="fetchInventory(this.value)" required>
+                    <option value="">Select a Room</option>
+                    {% for resource in resources %}
+                        <option value="{{ resource }}" {% if booking.resource == resource %} selected {% endif %}>{{ resource }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Additional Details -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>Additional Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-user-friends"></i> Contact & Participants
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_person" class="form-label">Contact Person</label>
+                                <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ booking.contact_person }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="participants" class="form-label">Expected Participants</label>
+                                <input type="number" class="form-control" id="participants" name="participants" value="{{ booking.participants }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-file-invoice-dollar"></i> Billing Information
+                            </div>
+                            <div class="mb-3">
+                                <label for="billing_info" class="form-label">Billing Email</label>
+                                <input type="email" class="form-control" id="billing_info" name="billing_info" value="{{ booking.billing_info }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="additional_info" class="form-label">Additional Information</label>
+                                <textarea class="form-control" id="additional_info" name="additional_info" rows="3">{{ booking.additional_info }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Section -->
+        <div class="form-section" id="inventory-section">
+            <div class="section-header">
+                <i class="fas fa-boxes"></i>
+                <h2>Inventory</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-4" id="inventory-items">
+                    {% for item in booking.inventory %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="inventory-card">
+                                <div class="inventory-title">{{ item.name }}</div>
+                                <div class="inventory-max">Maximum available: {{ item.max_quantity }}</div>
+                                <div class="form-group">
+                                    <label class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" 
+                                        name="inventory_{{ item.name }}" 
+                                        min="0" max="{{ item.max_quantity }}" 
+                                        value="{{ item.quantity }}" 
+                                        data-item-name="{{ item.name }}">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Hidden input to store the inventory data as a JSON string -->
+                <input type="hidden" id="inventory-items-data" name="inventory_items" value="">
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-concierge-bell"></i>
+                <h2>Services</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-3">
+                    {% for service in services %}
+                        <div class="col-md-4 col-lg-3">
+                            <div class="service-item">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="services[]" value="{{ service }}" {% if service in booking.services %} checked {% endif %} id="service_{{ loop.index }}">
+                                    <label class="form-check-label" for="service_{{ loop.index }}">{{ service }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Cleaning Charge Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <i class="fas fa-broom"></i>
+                <h2>Cleaning Charge</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-muted" id="cleaning-charge">Cleaning Charge: €{{ booking.cleaning_charge }}</p>
+                <input type="hidden" id="cleaning-charge-input" name="cleaning_charge" value="{{ booking.cleaning_charge }}">
+            </div>
+        </div>
+
+        <!-- Legal Agreements Section -->
+        <div class="legal-section">
+            <div class="legal-title">
+                <i class="fas fa-gavel"></i> Legal Agreements
+            </div>
+            <div class="legal-check">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="terms" id="terms" required>
+                    <label class="form-check-label" for="terms">I agree to the <a href="#" class="legal-link">terms and conditions</a></label>
+                </div>
+            </div>
+            <div class="legal-check">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="privacy" id="privacy" required>
+                    <label class="form-check-label" for="privacy">I agree to the <a href="#" class="legal-link">privacy policy</a></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button type="submit" class="btn-update">
+                <i class="fas fa-save"></i> Update Booking
+            </button>
+            
+            <form action="{{ url_for('initiate_cancellation', booking_number=booking.booking_number) }}" method="POST" class="d-inline">
+                <button type="submit" class="btn-cancel" onclick="return confirm('Are you sure you want to cancel this booking? A cancellation code will be sent to your email.');">
+                    <i class="fas fa-times-circle"></i> Cancel Booking
+                </button>
+            </form>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Hide or show time fields based on "Whole Day" checkbox
+    function toggleTimeFields() {
+        const isFullDay = document.getElementById('full_day').checked;
+        document.querySelectorAll('.time-field').forEach(field => {
+            field.style.display = isFullDay ? 'none' : 'block';
+        });
+    }
+
+    function fetchInventory(resource) {
+        console.log('Selected resource:', resource);
+        if (resource) {
+            fetch('/get_inventory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ resource: resource }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetched inventory data: ", data);
+                displayInventory(data.inventory);
+                calculateCleaningCharge(data.cleaning_charge);
+                document.getElementById('inventory-section').style.display = 'block';
+                
+                // Disable already booked time slots
+                disableBookedTimes(data.bookings);
+            })
+            .catch(error => console.error('Error fetching inventory:', error));
+        } else {
+            document.getElementById('inventory-section').style.display = 'none';
+        }
+    }
+
+    // Calculate and display cleaning charge based on selected resource and booking duration
+    function calculateCleaningCharge(dailyCharge) {
+        const startDate = new Date(document.getElementById('start_date').value);
+        const endDate = new Date(document.getElementById('end_date').value);
+
+        if (!isNaN(startDate) && !isNaN(endDate)) {
+            const timeDiff = endDate - startDate;
+            const daysBooked = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Add 1 to include the last day
+            const totalCleaningCharge = daysBooked * dailyCharge;
+
+            document.getElementById('cleaning-charge').textContent = `Cleaning Charge: €${totalCleaningCharge.toFixed(2)}`;
+            document.getElementById('cleaning-charge-input').value = totalCleaningCharge;
+        } else {
+            document.getElementById('cleaning-charge').textContent = "Cleaning Charge: N/A";
+            document.getElementById('cleaning-charge-input').value = 0;
+        }
+    }
+
+    function displayInventory(items) {
+        const inventoryItemsDiv = document.getElementById('inventory-items');
+        inventoryItemsDiv.innerHTML = '';  // Clear existing items
+
+        // Create a hidden input to store inventory data
+        const inventoryDataInput = document.createElement('input');
+        inventoryDataInput.type = 'hidden';
+        inventoryDataInput.name = 'inventory_items';
+        inventoryDataInput.id = 'inventory-items-data';  // We'll populate this with JSON data
+
+        if (items.length > 0) {
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('col-md-6', 'col-lg-4', 'mb-3');
+
+                const itemCard = document.createElement('div');
+                itemCard.classList.add('inventory-card');
+
+                const title = document.createElement('div');
+                title.classList.add('inventory-title');
+                title.textContent = item.name;
+                
+                const maxInfo = document.createElement('div');
+                maxInfo.classList.add('inventory-max');
+                maxInfo.textContent = `Maximum available: ${item.max_quantity}`;
+                
+                const formGroup = document.createElement('div');
+                formGroup.classList.add('form-group');
+                
+                const label = document.createElement('label');
+                label.classList.add('form-label');
+                label.textContent = 'Quantity';
+                label.htmlFor = `inventory_${item.name}`;
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.name = `inventory_${item.name}`;
+                input.id = `inventory_${item.name}`;
+                input.min = 0;
+                input.max = item.max_quantity;
+                input.value = item.quantity || 0;
+                input.classList.add('form-control');
+                input.setAttribute('data-item-name', item.name);
+
+                // When the input changes, update the hidden input with selected inventory
+                input.addEventListener('input', function() {
+                    updateInventoryData(items);
+                });
+
+                formGroup.appendChild(label);
+                formGroup.appendChild(input);
+                
+                itemCard.appendChild(title);
+                itemCard.appendChild(maxInfo);
+                itemCard.appendChild(formGroup);
+                itemDiv.appendChild(itemCard);
+                inventoryItemsDiv.appendChild(itemDiv);
+            });
+
+            // Add the hidden input to the form (only once)
+            inventoryItemsDiv.appendChild(inventoryDataInput);
+        }
+    }
+
+    function updateInventoryData(items) {
+        const inventoryData = [];
+
+        // Loop through the displayed inputs and collect the quantity for each item
+        items.forEach(item => {
+            const input = document.querySelector(`input[name="inventory_${item.name}"]`);
+            if (input) {
+                const quantity = parseInt(input.value, 10);
+                if (quantity > 0) {  // Only store if quantity is greater than 0
+                    inventoryData.push({
+                        name: item.name,
+                        quantity: quantity
+                    });
+                }
+            }
+        });
+
+        // Update the hidden input with the inventory data in JSON format
+        document.getElementById('inventory-items-data').value = JSON.stringify(inventoryData);
+    }
+
+    // Disable booked time slots based on already-booked data fetched from the server
+    function disableBookedTimes(bookings) {
+        const startTimeInput = document.getElementById('start_time');
+        const endTimeInput = document.getElementById('end_time');
+
+        // Reset disabled times
+        startTimeInput.removeAttribute('disabled');
+        endTimeInput.removeAttribute('disabled');
+
+        bookings.forEach(function(booking) {
+            const bookedStart = new Date(booking.start_date + ' ' + booking.start_time);
+            const bookedEnd = new Date(booking.end_date + ' ' + booking.end_time);
+            const selectedStart = new Date(document.getElementById('start_date').value);
+            const selectedEnd = new Date(document.getElementById('end_date').value);
+
+            if ((selectedStart >= bookedStart && selectedStart <= bookedEnd) ||
+                (selectedEnd >= bookedStart && selectedEnd <= bookedEnd) ||
+                (selectedStart <= bookedStart && selectedEnd >= bookedEnd)) {
+                // Disable conflicting time slots
+                startTimeInput.disabled = true;
+                endTimeInput.disabled = true;
+            }
+        });
+    }
+
+    // Recalculate the cleaning charge when the start or end date changes
+    document.getElementById('start_date').addEventListener('change', function() {
+        const resource = document.getElementById('resource').value;
+        if (resource) {
+            fetchInventory(resource); // Recalculate cleaning charge and disable booked times
+        }
+    });
+
+    document.getElementById('end_date').addEventListener('change', function() {
+        const resource = document.getElementById('resource').value;
+        if (resource) {
+            fetchInventory(resource); // Recalculate cleaning charge and disable booked times
+        }
+    });
+
+    // Ensure the time fields are hidden if "Whole Day" is checked on page load
+    window.onload = function() {
+        toggleTimeFields();
+        const resource = document.getElementById('resource').value;
+        if (resource) {
+            fetchInventory(resource); // Fetch and calculate cleaning charge on page load
+        }
+    };
+</script>
+{% endblock %}

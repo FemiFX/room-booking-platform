@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 500px;
+        margin: 5rem auto;
+        padding: 0 1rem;
+    }
+    
+    .login-card {
+        background-color: var(--white);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background-color: var(--primary-blue);
+        padding: 2.5rem 2.5rem 4rem;
+        position: relative;
+        text-align: center;
+    }
+    
+    .card-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: var(--white);
+        border-top-left-radius: 100%;
+        border-top-right-radius: 100%;
+    }
+    
+    .card-header h2 {
+        color: var(--white);
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .card-body {
+        padding: 2.5rem;
+    }
+    
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        background-color: rgba(19, 54, 108, 0.05);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        color: var(--primary-blue);
+    }
+    
+    .auth-icon i {
+        font-size: 2.5rem;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+        color: var(--dark-grey);
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(85, 153, 255, 0.25);
+        background-color: var(--white);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--dark-grey);
+        font-size: 0.9375rem;
+    }
+    
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group-text {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: var(--primary-grey);
+    }
+    
+    .form-check-input {
+        width: 1.125rem;
+        height: 1.125rem;
+        margin-top: 0.2rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--primary-blue);
+        border-color: var(--primary-blue);
+    }
+    
+    .form-check-label {
+        padding-left: 0.5rem;
+        font-size: 0.9375rem;
+        color: var(--dark-grey);
+    }
+    
+    .btn-login {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.875rem 0;
+        font-weight: 600;
+        border-radius: 8px;
+        font-size: 1.125rem;
+        width: 100%;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .btn-login:hover {
+        background-color: var(--accent-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(19, 54, 108, 0.2);
+    }
+    
+    .login-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        font-size: 0.9375rem;
+    }
+    
+    .login-footer a {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    .alert-danger {
+        background-color: #fff5f5;
+        color: #e53e3e;
+        border: 1px solid #fed7d7;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .alert-danger i {
+        font-size: 1.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="card-header">
+            <h2>Login to Your Account</h2>
+        </div>
+        
+        <div class="card-body">
+            <div class="auth-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            
+            <!-- Display error message if exists -->
+            {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>{{ error_message }}</div>
+                </div>
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        <input type="password" id="password" name="password" class="form-control" required placeholder="Enter your password">
+                    </div>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <!-- Show registration link if user does not exist -->
+                {% if show_register_link %}
+                    <a href="{{ url_for('register') }}">Don't have an account?</a>
+                {% else %}
+                    <span></span>
+                {% endif %}
+                
+                <a href="#">Forgot password?</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

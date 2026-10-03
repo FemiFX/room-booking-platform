@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Booking Calendar{% endblock %}
+{% block content %}
+<div id="Schedule"></div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Syncfusion Essential JS 2 Scripts -->
+<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+<link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    var scheduleObj = new ej.schedule.Schedule({
+            height: 'calc(100vh - 100px)',  // Adjust the height dynamically
+            width: '100%',
+            views: ['Day', 'Week', 'Month'],
+            selectedDate: new Date(),  // Set to today's date
+            timeFormat: 'HH:mm',  // Set 24-hour format
+            eventSettings: { 
+                dataSource: [],
+                fields: {
+                    id: 'Id',
+                    subject: { name: 'Subject' },
+                    description: { name: 'Description' },
+                    startTime: { name: 'StartTime' },
+                    endTime: { name: 'EndTime' },
+                    isAllDay: { name: 'IsAllDay' },
+                    color: { name: 'Color' }
+                },
+                allowEditing: false,  // Disable event editing
+                allowAdding: false,   // Disable adding new events
+                allowDeleting: false, // Disable deleting events
+                allowResizing: false, // Disable resizing events
+                allowDragAndDrop: false // Disable drag-and-drop
+            },
+            timeScale: {
+                interval: 120,
+                slotCount: 2
+            },
+            eventRendered: function(args) {
+            // Ensure each event is displayed with the appropriate color
+            args.element.style.backgroundColor = args.data.Color;
+        }
+       
+    });
+    scheduleObj.appendTo('#Schedule');
+
+    // Fetch bookings data from the backend
+    fetch('/get_bookings')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched data:', data);
+            scheduleObj.eventSettings.dataSource = data;
+            scheduleObj.refresh();  // Refresh the schedule to reflect the updated data
+        })
+        .catch(error => console.error('Error fetching bookings:', error));
+
+    // Add the "All Day" label to the header row for all-day events
+    setTimeout(function() {
+        const allDayHeader = document.querySelector('.e-all-day-cells');
+        if (allDayHeader) {
+            const allDayLabel = document.createElement('div');
+            allDayLabel.textContent = 'All Day';
+            allDayLabel.style.position = 'absolute';
+            allDayLabel.style.left = '0';
+            allDayLabel.style.top = '0';
+            allDayLabel.style.fontSize = '1em';
+            allDayLabel.style.padding = '5px';
+            allDayLabel.style.fontWeight = 'bold';
+            allDayLabel.style.background = '#f5f5f5';  // Match the background color
+            allDayLabel.style.borderRight = 'none';  // Optional, match the grid styling
+            allDayHeader.prepend(allDayLabel);  // Add the label to the all-day header
+        }
+    }, 500);  // Delay to ensure the calendar is fully rendered
+});
+
+</script>
+
+{% endblock %}

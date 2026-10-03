@@ -1,0 +1,911 @@
+{% extends "base.html" %}
+
+{% block title %}Room Booking Form{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Dark Theme Styling */
+    body {
+        background-color: #0a192f;
+        color: #e2e8f0;
+    }
+    
+    .booking-form-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    
+    .booking-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .booking-header h1 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .booking-header p {
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .progress-container {
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    
+    .progress-line {
+        position: absolute;
+        top: 2.5rem;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.1);
+        z-index: 1;
+    }
+    
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+    }
+    
+    .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .step-circle.active {
+        background-color: var(--accent-blue);
+        color: var(--white);
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 15px rgba(85, 153, 255, 0.5);
+    }
+    
+    .step-icon {
+        font-size: 1.25rem;
+    }
+    
+    .step-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+    }
+    
+    .step-label.active {
+        color: var(--accent-blue);
+    }
+    
+    .form-section {
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+    }
+    
+    .section-header {
+        padding: 1.25rem 1.5rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .section-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--white);
+    }
+    
+    .section-header i {
+        font-size: 1.5rem;
+        color: var(--accent-blue);
+    }
+    
+    .section-body {
+        padding: 2rem;
+    }
+    
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: var(--white);
+        transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(85, 153, 255, 0.25);
+        color: var(--white);
+    }
+    
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9375rem;
+    }
+    
+    .form-text {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .required-field::after {
+        content: " *";
+        color: #f56565;
+    }
+    
+    .form-check-input {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-top: 0.25rem;
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--accent-blue);
+        border-color: var(--accent-blue);
+    }
+    
+    .form-check-label {
+        padding-left: 0.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+    }
+    
+    .btn-next, .btn-prev, .btn-submit {
+        padding: 0.875rem 1.75rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-next, .btn-submit {
+        background-color: var(--accent-blue);
+        color: white;
+        border: none;
+    }
+    
+    .btn-next:hover, .btn-submit:hover {
+        background-color: #4a8cff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(85, 153, 255, 0.3);
+    }
+    
+    .btn-prev {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-prev:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+    }
+    
+    .input-group-text {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .detail-card {
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .detail-card:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .detail-card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .detail-card-title i {
+        color: var(--accent-blue);
+    }
+    
+    .service-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    
+    .service-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .service-item .form-check-input {
+        cursor: pointer;
+    }
+    
+    .service-item .form-check-label {
+        cursor: pointer;
+    }
+    
+    .inventory-card {
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        padding: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s ease;
+        height: 100%;
+    }
+    
+    .inventory-card:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: var(--accent-blue);
+    }
+    
+    .inventory-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--white);
+    }
+    
+    .inventory-max {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+    
+    .legal-section {
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .legal-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--white);
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .legal-title i {
+        color: var(--accent-blue);
+    }
+    
+    .legal-check {
+        margin-bottom: 1rem;
+    }
+    
+    .legal-link {
+        color: var(--accent-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .legal-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Date & time input styling */
+    input[type="date"], input[type="time"] {
+        color-scheme: dark;
+    }
+    
+    /* Error message styling */
+    .alert-warning {
+        background-color: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    /* Booking progress */
+    .booking-progress {
+        display: flex;
+        justify-content: space-between;
+        width: 85%;
+        margin: 0 auto 3rem;
+        position: relative;
+    }
+    
+    .booking-progress::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-50%);
+        z-index: 0;
+    }
+    
+    .booking-progress-step {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #0a192f;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .booking-progress-step.active {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 15px rgba(85, 153, 255, 0.4);
+    }
+    
+    .booking-progress-step i {
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .booking-progress-step.active i {
+        color: var(--accent-blue);
+    }
+    
+    .booking-progress-label {
+        position: absolute;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.5);
+        white-space: nowrap;
+        font-weight: 500;
+    }
+    
+    .booking-progress-step.active .booking-progress-label {
+        color: var(--accent-blue);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-form-container">
+    <div class="booking-header">
+        <h1>Room Booking System</h1>
+        <p>Complete the form below to request a room booking</p>
+    </div>
+    
+    {% if error %}
+    <div class="alert alert-warning" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+    </div>
+    {% endif %}
+    
+    <!-- Booking Progress -->
+    <div class="booking-progress">
+        <div class="booking-progress-step active" id="step-1">
+            <i class="fas fa-user"></i>
+            <span class="booking-progress-label">Personal Details</span>
+        </div>
+        <div class="booking-progress-step" id="step-2">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="booking-progress-label">Event Details</span>
+        </div>
+        <div class="booking-progress-step" id="step-3">
+            <i class="fas fa-door-open"></i>
+            <span class="booking-progress-label">Room Selection</span>
+        </div>
+        <div class="booking-progress-step" id="step-4">
+            <i class="fas fa-clipboard-list"></i>
+            <span class="booking-progress-label">Additional Info</span>
+        </div>
+    </div>
+    
+    <form action="{{ url_for('submit_form') }}" method="post" id="booking-form">
+        <!-- Personal Details -->
+        <div class="form-section" id="personal-section">
+            <div class="section-header">
+                <i class="fas fa-user-circle"></i>
+                <h2>Personal Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label for="first_name" class="form-label required-field">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ personal_details.first_name if personal_details else '' }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="last_name" class="form-label required-field">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" required value="{{ personal_details.last_name if personal_details else '' }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="academic_title" class="form-label">Academic Title</label>
+                        <input type="text" class="form-control" id="academic_title" name="academic_title" value="{{ personal_details.academic_title if personal_details else '' }}">
+                    </div>
+                </div>
+                
+                <div class="row g-4 mt-3">
+                    <div class="col-md-6">
+                        <label for="organization" class="form-label">Organization</label>
+                        <input type="text" class="form-control" id="organization" name="organization" value="{{ personal_details.organization if personal_details else '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label required-field">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" required value="{{ personal_details.email if personal_details else '' }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" name="address" rows="3">{{ personal_details.address if personal_details else '' }}</textarea>
+                </div>
+                
+                <div class="button-container">
+                    <div></div> <!-- Empty div for flex spacing -->
+                    <button type="button" class="btn-next" data-next="event-section">
+                        Next Step <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Event Details -->
+        <div class="form-section" id="event-section" style="display: none;">
+            <div class="section-header">
+                <i class="fas fa-calendar-alt"></i>
+                <h2>Event Details</h2>
+            </div>
+            <div class="section-body">
+                <div class="mb-4">
+                    <label for="event_title" class="form-label required-field">Event Title</label>
+                    <input type="text" class="form-control" id="event_title" name="event_title" required value="{{ event_title if event_title else '' }}">
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-calendar"></i> Date Range
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="start_date" class="form-label required-field">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" required value="{{ start_date if start_date else '' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="end_date" class="form-label required-field">End Date</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" required value="{{ end_date if end_date else '' }}">
+                                </div>
+                            </div>
+                            <div class="form-check mt-3">
+                                <input type="checkbox" class="form-check-input" id="full_day" name="full_day" onclick="toggleTimeFields()" {% if full_day %}checked{% endif %}>
+                                <label class="form-check-label" for="full_day">Whole Day</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-clock"></i> Time Range
+                            </div>
+                            <div class="row g-3 time-fields">
+                                <div class="col-md-6 time-field">
+                                    <label for="start_time" class="form-label">Start Time</label>
+                                    <input type="time" class="form-control" id="start_time" name="start_time" value="{{ start_time if start_time else '' }}">
+                                </div>
+                                <div class="col-md-6 time-field">
+                                    <label for="end_time" class="form-label">End Time</label>
+                                    <input type="time" class="form-control" id="end_time" name="end_time" value="{{ end_time if end_time else '' }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn-prev" data-prev="personal-section">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="button" class="btn-next" data-next="resource-section">
+                        Next Step <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resource Selection -->
+        <div class="form-section" id="resource-section" style="display: none;">
+            <div class="section-header">
+                <i class="fas fa-door-open"></i>
+                <h2>Room Selection</h2>
+            </div>
+            <div class="section-body">
+                <div class="mb-4">
+                    <label for="resource" class="form-label required-field">Select a Room</label>
+                    <select class="form-select" name="resource" id="resource" onchange="fetchInventory(this.value); showAdditionalDetails();" required>
+                        <option value="">Choose a room...</option>
+                        {% for resource in resources %}
+                            <option value="{{ resource['name'] }}" {% if selected_resource == resource['name'] %}selected{% endif %}>{{ resource['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Inventory Section -->
+                <div id="inventory-section" style="display: none;">
+                    <h3 class="h5 mb-3 text-white">
+                        <i class="fas fa-boxes me-2 text-primary"></i> Available Inventory
+                    </h3>
+                    <div class="row g-3" id="inventory-items"></div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn-prev" data-prev="event-section">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="button" class="btn-next" data-next="additional-section">
+                        Next Step <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Details -->
+        <div class="form-section" id="additional-section" style="display: none;">
+            <div class="section-header">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>Additional Information</h2>
+            </div>
+            <div class="section-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-user-friends"></i> Contact & Participants
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_person" class="form-label">Contact Person</label>
+                                <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ contact_person if contact_person else '' }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="participants" class="form-label">Expected Participants</label>
+                                <input type="number" class="form-control" id="participants" name="participants" value="{{ participants if participants else '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="detail-card">
+                            <div class="detail-card-title">
+                                <i class="fas fa-file-invoice-dollar"></i> Billing Information
+                            </div>
+                            <div class="mb-3">
+                                <label for="billing_info" class="form-label">Billing Email</label>
+                                <input type="email" class="form-control" id="billing_info" name="billing_info" value="{{ billing_info if billing_info else '' }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="additional_info" class="form-label">Additional Information</label>
+                                <textarea class="form-control" id="additional_info" name="additional_info" rows="3">{{ additional_info if additional_info else '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Services Section -->
+                <div class="detail-card mt-4">
+                    <div class="detail-card-title">
+                        <i class="fas fa-concierge-bell"></i> Additional Services
+                    </div>
+                    <div class="row g-3">
+                        {% for service in services %}
+                            <div class="col-md-4 col-lg-3">
+                                <div class="service-item">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="services[]" value="{{ service }}" id="service_{{ loop.index }}" {% if services_selected and service in services_selected %}checked{% endif %}>
+                                        <label class="form-check-label" for="service_{{ loop.index }}">{{ service }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Cleaning Charge Section -->
+                <div class="detail-card mt-4">
+                    <div class="detail-card-title">
+                        <i class="fas fa-broom"></i> Cleaning Charge
+                    </div>
+                    <p class="text-muted mb-0" id="cleaning-charge">This will be dynamically calculated based on the selected resource and duration.</p>
+                    <input type="hidden" id="cleaning-charge-input" name="cleaning_charge" value="0">
+                </div>
+                
+                <!-- Legal Agreements Section -->
+                <div class="legal-section">
+                    <div class="legal-title">
+                        <i class="fas fa-gavel"></i> Legal Agreements
+                    </div>
+                    <div class="legal-check">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="terms" id="terms" required>
+                            <label class="form-check-label" for="terms">I agree to the <a href="#" class="legal-link">terms and conditions</a></label>
+                        </div>
+                    </div>
+                    <div class="legal-check">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="privacy" id="privacy" required>
+                            <label class="form-check-label" for="privacy">I agree to the <a href="#" class="legal-link">privacy policy</a></label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn-prev" data-prev="resource-section">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane me-2"></i> Send Booking Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Navigation between form sections
+    document.addEventListener('DOMContentLoaded', function() {
+        // Next step buttons
+        document.querySelectorAll('.btn-next').forEach(button => {
+            button.addEventListener('click', function() {
+                const nextSection = this.getAttribute('data-next');
+                const currentSection = this.closest('.form-section').id;
+                
+                // Hide current section
+                document.getElementById(currentSection).style.display = 'none';
+                
+                // Show next section
+                document.getElementById(nextSection).style.display = 'block';
+                
+                // Update progress indicator
+                updateProgressIndicator(nextSection);
+                
+                // Smooth scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Previous step buttons
+        document.querySelectorAll('.btn-prev').forEach(button => {
+            button.addEventListener('click', function() {
+                const prevSection = this.getAttribute('data-prev');
+                const currentSection = this.closest('.form-section').id;
+                
+                // Hide current section
+                document.getElementById(currentSection).style.display = 'none';
+                
+                // Show previous section
+                document.getElementById(prevSection).style.display = 'block';
+                
+                // Update progress indicator
+                updateProgressIndicator(prevSection);
+                
+                // Smooth scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        function updateProgressIndicator(currentSection) {
+            // Get step number based on section ID
+            let stepNumber = 1;
+            if (currentSection === 'event-section') stepNumber = 2;
+            if (currentSection === 'resource-section') stepNumber = 3;
+            if (currentSection === 'additional-section') stepNumber = 4;
+            
+            // Update progress steps
+            for (let i = 1; i <= 4; i++) {
+                const stepElement = document.getElementById(`step-${i}`);
+                if (i <= stepNumber) {
+                    stepElement.classList.add('active');
+                } else {
+                    stepElement.classList.remove('active');
+                }
+            }
+        }
+    });
+
+    // Hide or show time fields based on "Whole Day" checkbox
+    function toggleTimeFields() {
+        const isFullDay = document.getElementById('full_day').checked;
+        document.querySelectorAll('.time-field').forEach(field => {
+            field.style.display = isFullDay ? 'none' : 'block';
+        });
+    }
+
+    // Fetch inventory dynamically based on resource selected and calculate cleaning charge
+    function fetchInventory(resource) {
+        if (resource) {
+            fetch('/get_inventory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ resource: resource }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayInventory(data.inventory);
+                calculateCleaningCharge(data.cleaning_charge);
+                document.getElementById('inventory-section').style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching inventory:', error));
+        } else {
+            document.getElementById('inventory-section').style.display = 'none';
+        }
+    }
+
+    // Calculate and display cleaning charge based on selected resource and booking duration
+    function calculateCleaningCharge(dailyCharge) {
+        const startDate = new Date(document.getElementById('start_date').value);
+        const endDate = new Date(document.getElementById('end_date').value);
+
+        if (!isNaN(startDate) && !isNaN(endDate)) {
+            const timeDiff = endDate - startDate;
+            const daysBooked = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Add 1 to include the last day
+            const totalCleaningCharge = daysBooked * dailyCharge;
+
+            document.getElementById('cleaning-charge').textContent = `Cleaning Charge: €${totalCleaningCharge.toFixed(2)}`;
+            document.getElementById('cleaning-charge-input').value = totalCleaningCharge;
+        } else {
+            document.getElementById('cleaning-charge').textContent = "Cleaning Charge: N/A";
+            document.getElementById('cleaning-charge-input').value = 0;
+        }
+    }
+
+    // Display inventory dynamically
+    function displayInventory(items) {
+        const inventoryItemsDiv = document.getElementById('inventory-items');
+        inventoryItemsDiv.innerHTML = '';
+        
+        if (items.length > 0) {
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('col-md-6', 'col-lg-4');
+
+                const card = document.createElement('div');
+                card.classList.add('inventory-card');
+                
+                const title = document.createElement('div');
+                title.classList.add('inventory-title');
+                title.textContent = item.name;
+                
+                const maxInfo = document.createElement('div');
+                maxInfo.classList.add('inventory-max');
+                maxInfo.textContent = `Maximum available: ${item.max_quantity}`;
+                
+                const formGroup = document.createElement('div');
+                formGroup.classList.add('form-group');
+                
+                const label = document.createElement('label');
+                label.classList.add('form-label');
+                label.textContent = 'Quantity';
+                label.htmlFor = `inventory_${item.name}`;
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.name = `inventory_${item.name}`;
+                input.id = `inventory_${item.name}`;
+                input.min = 0;
+                input.max = item.max_quantity;
+                input.value = 0;
+                input.classList.add('form-control');
+                
+                formGroup.appendChild(label);
+                formGroup.appendChild(input);
+                
+                card.appendChild(title);
+                card.appendChild(maxInfo);
+                card.appendChild(formGroup);
+                itemDiv.appendChild(card);
+                inventoryItemsDiv.appendChild(itemDiv);
+            });
+        } else {
+            const noItemsDiv = document.createElement('div');
+            noItemsDiv.classList.add('col-12');
+            noItemsDiv.innerHTML = '<p class="text-muted">No inventory items available for this room.</p>';
+            inventoryItemsDiv.appendChild(noItemsDiv);
+        }
+    }
+
+    // Show additional details when a resource is selected
+    function showAdditionalDetails() {
+        document.getElementById('additional-details').style.display = 'block';
+    }
+
+    // Recalculate the cleaning charge when the start or end date changes
+    document.getElementById('start_date').addEventListener('change', function() {
+        const resource = document.getElementById('resource').value;
+        if (resource) {
+            fetchInventory(resource); // Recalculate cleaning charge
+        }
+    });
+
+    document.getElementById('end_date').addEventListener('change', function() {
+        const resource = document.getElementById('resource').value;
+        if (resource) {
+            fetchInventory(resource); // Recalculate cleaning charge
+        }
+    });
+
+    // Ensure the time fields are hidden if "Whole Day" is checked on page load
+    window.onload = function() {
+        toggleTimeFields();
+    };
+</script>
+{% endblock %}

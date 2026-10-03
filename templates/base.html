@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Room Booking System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <style>
+            :root {
+        /* Primary colors */
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
+        --primary-dark: #1d4ed8;
+        
+        /* Background colors */
+        --dark: #0f172a;
+        --darker: #0a0f1d;
+        
+        /* Card and component backgrounds */
+        --card-bg: rgba(30, 41, 59, 0.5);
+        --input-bg: rgba(15, 23, 42, 0.6);
+        
+        /* Success/accent color */
+        --accent: #10b981;
+        --accent-dark: #059669;
+        
+        /* Gray scale */
+        --light: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        
+        /* Derived UI variables */
+        --primary-bg: var(--dark);
+        --secondary-bg: var(--darker);
+        --text-primary: var(--light);
+        --text-secondary: var(--gray-400);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --chart-line: var(--primary-light);
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        padding-top: 72px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar {
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        color: var(--text-primary) !important;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+        color: var(--text-secondary) !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        margin: 0 0.2rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover {
+        color: var(--text-primary) !important;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.active {
+        color: var(--text-primary) !important;
+        background-color: var(--primary);
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(12px);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-color: rgba(15, 23, 42, 0.3);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 1.25rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+        border-color: transparent;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .user-menu {
+        position: relative;
+        display: inline-block;
+    }
+
+    .user-menu .dropdown-menu {
+        background-color: var(--gray-800);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        backdrop-filter: blur(12px);
+    }
+
+    .user-menu .dropdown-item {
+        color: var(--text-secondary);
+        padding: 0.7rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .user-menu .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+    }
+
+    .brand-logo {
+        filter: brightness(0) invert(1);
+        opacity: 0.9;
+        transition: opacity 0.2s ease;
+    }
+
+    .navbar-brand:hover .brand-logo {
+        opacity: 1;
+    }
+
+    .navbar-toggler {
+        border: none;
+        padding: 0;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+    @media (max-width: 991.98px) {
+        .navbar-nav {
+            padding: 1rem 0;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link {
+            padding: 0.7rem 1rem;
+            margin: 0.2rem 0;
+        }
+    }
+
+    /* Make the main content area grow to fill available space */
+    .container.mt-4 {
+        flex: 1 0 auto;
+    }
+
+    /* Footer styling */
+    .footer {
+        flex-shrink: 0;
+        margin-top: auto; /* This is already in your CSS, good! */
+        background-color: rgba(15, 23, 42, 0.8);
+        border-top: 1px solid var(--border-color);
+        padding: 1.5rem 0;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Stats cards */
+    .stat-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--border-color);
+        backdrop-filter: blur(12px);
+    }
+
+    .stat-card .title {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card .change {
+        font-size: 0.875rem;
+        color: var(--accent); /* Green for positive */
+    }
+
+    .stat-card .change.negative {
+        color: #ef4444; /* Red for negative */
+    }
+
+    /* Form elements */
+    .form-control {
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 8px;
+        padding: 0.875rem 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        background-color: var(--input-bg);
+        border-color: var(--primary-light);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+
+    .form-label {
+        color: var(--gray-300);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Badges and alerts */
+    .badge.bg-primary {
+        background: var(--primary-light) !important;
+    }
+
+    .badge.bg-success {
+        background: var(--accent) !important;
+    }
+
+    .alert-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #a7f3d0;
+    }
+
+    .alert-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fecaca;
+    }
+
+    /* Table styling */
+    .table {
+        color: var(--gray-300);
+    }
+
+    .table thead th {
+        border-bottom: 1px solid var(--border-color);
+        color: var(--gray-400);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .table tbody td {
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: middle;
+    }
+
+    /* Animation */
+    .fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .text-muted {
+  --bs-text-opacity: 1;
+  color: rgba(185, 199, 213, 0.75) !important;
+    }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('form') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Room Booking Logo" style="height: 60px; margin-right: 10px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('form') }}">
+                            <i class="fas fa-calendar-plus me-1"></i> Book a Room
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('retrieve_booking') }}">
+                            <i class="fas fa-search me-1"></i> View/Modify
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('calendar') }}">
+                            <i class="fas fa-calendar-alt me-1"></i> Calendar
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-1"></i> Admin
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('users') }}">
+                                    <i class="fas fa-users-cog me-1"></i> Users
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <span class="user-status">
+                                    <i class="fas fa-circle fa-xs"></i>
+                                    {{ current_user.username }} <i class="fas fa-sign-out-alt ms-2"></i>
+                                </span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">
+                                <i class="fas fa-user-plus me-1"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 fade-in">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-decoration-none me-3 text-secondary">Privacy Policy</a>
+                    <a href="#" class="text-decoration-none me-3 text-secondary">Terms of Service</a>
+                    <a href="#" class="text-decoration-none text-secondary">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

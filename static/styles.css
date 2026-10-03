@@ -1,0 +1,165 @@
+/* Global Styles */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #0a3042;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Form Container */
+form {
+    background-color: #ffffff;
+    padding: 30px;
+    margin: 3em auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    border-left: 6px solid #0a3042;
+}
+
+/* Form Headers */
+form h1, form h2 {
+    color: #0a3042;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Input Fields, Textareas, Selects */
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+    width: 100%;
+    padding: 14px;
+    margin: 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #0a3042;
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* Labels */
+label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Checkboxes and Radios */
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background-color: #0a3042;
+    color: white;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+}
+
+button[type="submit"]:hover {
+    background-color: #08303a;
+}
+
+/* Additional Style for the 'Whole Day' Checkbox */
+input[type="checkbox"]#full_day {
+    transform: scale(1.5);
+    margin-right: 10px;
+}
+
+/* Text Area */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Inventory Section */
+#inventory-section {
+    margin-top: 20px;
+}
+
+.inventory-item label {
+    font-size: 14px;
+    color: #0a3042;
+    font-weight: 500;
+}
+
+.inventory-item input[type="number"] {
+    width: 60px;
+}
+
+/* Dynamic Message Styles */
+#cleaning-charge {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Legal Agreement Section */
+form h2.legal {
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+label[for="terms"],
+label[for="privacy"] {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.3);
+}
+
+label a {
+    color: #0a3042;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+label a:hover {
+    color: #08303a;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    form {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        font-size: 18px;
+    }
+}
+

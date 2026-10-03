@@ -1,0 +1,49 @@
+# Local stack: MySQL + the Flask app.
+#
+#   cp .env.example .env && docker compose up -d --build
+#   → http://localhost:8000
+#
+# Schema and demo data apply automatically on first start, from db/*.sql.
+# `docker compose down -v` wipes the volume and re-seeds.
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpw}
+      MYSQL_DATABASE: ${DB_NAME:-booking_app}
+      MYSQL_USER: ${DB_USER:-booking}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-booking}
+    ports:
+      - "${DB_PORT_HOST:-3316}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Applied in filename order, once, on an empty data directory.
+      - ./db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # --silent so the password isn't echoed into healthcheck output.
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  web:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    depends_on:
+      # Gate on healthy, not started: MySQL accepts TCP well before it accepts a
+      # login, so an ungated app crashes on its first query.
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

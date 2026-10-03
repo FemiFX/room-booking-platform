@@ -1,0 +1,13 @@
+# The packages this application actually imports.
+#
+# The original list carried a full matplotlib/scipy/numpy/pillow tree that the
+# app never uses, plus `mysql-connector` -- the deprecated package, not Oracle's
+# maintained `mysql-connector-python`.
+Flask==3.0.3
+Flask-Cors==5.0.0
+Flask-Login==0.6.3
+Flask-Bcrypt==1.0.1
+Flask-Mail==0.10.0
+mysql-connector-python==9.0.0
+requests==2.32.3
+gunicorn==23.0.0

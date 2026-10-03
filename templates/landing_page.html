@@ -1,0 +1,1179 @@
+{% extends "base.html" %}
+
+{% block title %}Room Booking System - Technical Overview{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Tech showcase styling */
+    .tech-section {
+        padding: 3rem 0;
+    }
+    
+    .tech-header {
+        padding: 3rem 0;
+        background: linear-gradient(120deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 30, 0.95) 100%);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    
+    .tech-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232563eb' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.1;
+    }
+    
+    .tech-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
+    
+    .tech-header p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        max-width: 700px;
+    }
+    
+    .section-title {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+    
+    .section-title p {
+        color: var(--text-secondary);
+    }
+    
+    .tech-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.75rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(12px);
+    }
+    
+    .tech-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .tech-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        background-color: rgba(37, 99, 235, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        color: var(--primary-light);
+        font-size: 1.5rem;
+    }
+    
+    .tech-card h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+    }
+    
+    .tech-card p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+    
+    /* Code block styling */
+    .code-section {
+        padding: 2rem 0;
+    }
+    
+    .code-card {
+        background-color: rgba(15, 23, 42, 0.95);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .code-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.25rem;
+        background-color: rgba(15, 23, 42, 0.95);
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .code-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+    }
+    
+    .code-title i {
+        margin-right: 0.5rem;
+        color: var(--primary-light);
+    }
+    
+    .code-dots {
+        display: flex;
+        gap: 6px;
+    }
+    
+    .code-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    
+    .code-dot-red {
+        background-color: #e74c3c;
+    }
+    
+    .code-dot-yellow {
+        background-color: #f1c40f;
+    }
+    
+    .code-dot-green {
+        background-color: #2ecc71;
+    }
+    
+    .code-content {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+    
+    .code-content pre {
+        margin: 0;
+        color: var(--text-primary);
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Architecture diagram styling */
+    .architecture-section {
+        padding: 3rem 0;
+    }
+    
+    .architecture-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .architecture-diagram {
+        width: 100%;
+        height: auto;
+        margin: 1rem 0;
+    }
+    
+    /* Database schema styling */
+    .database-section {
+        padding: 3rem 0;
+    }
+    
+    .database-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .table-relation {
+        margin-top: 1.5rem;
+    }
+    
+    .table-relation-card {
+        background-color: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .table-relation-card h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .table-relation-card h4 i {
+        margin-right: 0.5rem;
+        color: var(--primary-light);
+    }
+    
+    .table-relation-card ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    
+    .table-relation-card ul li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .table-relation-card ul li:last-child {
+        border-bottom: none;
+    }
+    
+    .field-type {
+        color: #3498db;
+        font-size: 0.85rem;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+    
+    .primary-key {
+        color: #e74c3c;
+        margin-right: 0.5rem;
+    }
+    
+    .foreign-key {
+        color: #f39c12;
+        margin-right: 0.5rem;
+    }
+    
+    /* Features section with technical details */
+    .features-technical-section {
+        padding: 3rem 0;
+    }
+    
+    .feature-technical-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.75rem;
+        height: 100%;
+        margin-bottom: 2rem;
+    }
+    
+    .feature-technical-header {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1.25rem;
+    }
+    
+    .feature-technical-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background-color: rgba(37, 99, 235, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: var(--primary-light);
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+    
+    .feature-technical-title {
+        margin-top: 0.25rem;
+    }
+    
+    .feature-technical-title h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text-primary);
+    }
+    
+    .feature-technical-title span {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    
+    .tech-tag {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 50px;
+        background-color: rgba(37, 99, 235, 0.1);
+        color: var(--primary-light);
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .tech-tag i {
+        margin-right: 0.25rem;
+    }
+    
+    /* API endpoint section */
+    .api-section {
+        padding: 3rem 0;
+    }
+    
+    .api-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.75rem;
+        margin-bottom: 2rem;
+    }
+    
+    .api-endpoint {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .api-endpoint:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .api-endpoint-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .api-method {
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .api-method-get {
+        background-color: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+    }
+    
+    .api-method-post {
+        background-color: rgba(52, 152, 219, 0.1);
+        color: #3498db;
+    }
+    
+    .api-method-put {
+        background-color: rgba(243, 156, 18, 0.1);
+        color: #f39c12;
+    }
+    
+    .api-method-delete {
+        background-color: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+    }
+    
+    .api-path {
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        color: var(--text-primary);
+        font-size: 1rem;
+    }
+    
+    .api-description {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+    
+    .api-parameters {
+        background-color: rgba(15, 23, 42, 0.5);
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    
+    .api-parameters h5 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+    }
+    
+    .api-parameters ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    
+    .api-parameters ul li {
+        padding: 0.35rem 0;
+        display: flex;
+        font-size: 0.9rem;
+    }
+    
+    .api-param-name {
+        font-weight: 600;
+        color: var(--primary-light);
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+        width: 140px;
+    }
+    
+    .api-param-type {
+        color: #e67e22;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+        width: 80px;
+    }
+    
+    .api-param-desc {
+        color: var(--text-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Technical Header -->
+<section class="tech-header">
+    <div class="container">
+        <h1>Room Booking System - Technical Implementation</h1>
+        <p>A comprehensive demonstration of web application development using Flask, SQLAlchemy ORM, Bootstrap, and modern JavaScript. This project showcases a complete full-stack implementation with responsive design, database modeling, and RESTful API architecture.</p>
+        <div class="d-flex flex-wrap mt-4">
+            <a href="https://github.com/yourusername/room-booking-system" target="_blank" class="btn btn-primary me-3 mb-2">
+                <i class="fab fa-github me-2"></i> View Source Code
+            </a>
+            <a href="{{ url_for('form') }}" class="btn btn-outline-light mb-2">
+                <i class="fas fa-calendar-check me-2"></i> Live Demo
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Technology Stack Section -->
+<section class="tech-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Technology Stack</h2>
+            <p>A modern full-stack application featuring the following technologies</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3>Backend</h3>
+                    <p>Built with Flask framework for routing and request handling. Uses SQLAlchemy ORM for database interactions and Jinja2 templating engine for server-side rendering.</p>
+                    <div class="mt-3">
+                        <span class="tech-tag"><i class="fab fa-python"></i> Python 3.9</span>
+                        <span class="tech-tag"><i class="fas fa-flask"></i> Flask</span>
+                        <span class="tech-tag"><i class="fas fa-database"></i> SQLAlchemy</span>
+                        <span class="tech-tag"><i class="fas fa-lock"></i> Flask-Login</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <h3>Frontend</h3>
+                    <p>Responsive design with Bootstrap 5, custom CSS variables for theming, and interactive components. Uses JavaScript for dynamic content loading and form validation.</p>
+                    <div class="mt-3">
+                        <span class="tech-tag"><i class="fab fa-bootstrap"></i> Bootstrap 5</span>
+                        <span class="tech-tag"><i class="fab fa-js"></i> JavaScript</span>
+                        <span class="tech-tag"><i class="fab fa-css3"></i> Custom CSS</span>
+                        <span class="tech-tag"><i class="fas fa-calendar"></i> Syncfusion JS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Infrastructure</h3>
+                    <p>Deployed on cloud infrastructure with continuous integration and deployment. Email notifications via SMTP integration for booking confirmations and updates.</p>
+                    <div class="mt-3">
+                        <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
+                        <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
+                        <span class="tech-tag"><i class="fas fa-envelope"></i> SMTP</span>
+                        <span class="tech-tag"><i class="fas fa-shield-alt"></i> CSRF Protection</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Code Sample Section -->
+<section class="code-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Code Samples</h2>
+            <p>Examples of code implementation throughout the project</p>
+        </div>
+        
+        <!-- Booking Route Handler Code -->
+        <div class="code-card">
+            <div class="code-header">
+                <div class="code-title">
+                    <i class="fab fa-python"></i> routes.py
+                </div>
+                <div class="code-dots">
+                    <div class="code-dot code-dot-red"></div>
+                    <div class="code-dot code-dot-yellow"></div>
+                    <div class="code-dot code-dot-green"></div>
+                </div>
+            </div>
+            <div class="code-content">
+                <pre>@app.route('/submit_form', methods=['POST'])
+def submit_form():
+    """Handle the booking form submission and create a new booking"""
+    
+    # Extract form data
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    email = request.form.get('email')
+    event_title = request.form.get('event_title')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+    resource = request.form.get('resource')
+    
+    # Generate unique booking number
+    booking_number = generate_booking_number()
+    
+    # Create new booking in database
+    new_booking = Booking(
+        booking_number=booking_number,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        event_title=event_title,
+        start_date=start_date,
+        end_date=end_date,
+        resource=resource,
+        # Additional fields omitted for brevity
+    )
+    
+    db.session.add(new_booking)
+    db.session.commit()
+    
+    # Process inventory items
+    process_inventory_items(request.form, booking_number)
+    
+    # Send confirmation email
+    send_booking_confirmation(new_booking)
+    
+    return render_template('confirmation_page.html', booking_number=booking_number)</pre>
+            </div>
+        </div>
+        
+        <!-- Database Model Code -->
+        <div class="code-card">
+            <div class="code-header">
+                <div class="code-title">
+                    <i class="fas fa-database"></i> models.py
+                </div>
+                <div class="code-dots">
+                    <div class="code-dot code-dot-red"></div>
+                    <div class="code-dot code-dot-yellow"></div>
+                    <div class="code-dot code-dot-green"></div>
+                </div>
+            </div>
+            <div class="code-content">
+                <pre>class Resource(db.Model):
+    """Resource model representing bookable rooms or spaces"""
+    __tablename__ = 'resources'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    capacity = db.Column(db.Integer)
+    cleaning_charge = db.Column(db.Float, default=0)
+    
+    # Relationship with inventory items
+    inventory_items = db.relationship('Inventory', backref='resource', lazy=True)
+    # Relationship with bookings
+    bookings = db.relationship('Booking', backref='resource_obj', lazy=True, 
+                             foreign_keys='Booking.resource_id')
+    
+    def __repr__(self):
+        return f'<Resource {self.name}>'</pre>
+            </div>
+        </div>
+        
+        <!-- JavaScript for Interactive Form -->
+        <div class="code-card">
+            <div class="code-header">
+                <div class="code-title">
+                    <i class="fab fa-js"></i> form_handlers.js
+                </div>
+                <div class="code-dots">
+                    <div class="code-dot code-dot-red"></div>
+                    <div class="code-dot code-dot-yellow"></div>
+                    <div class="code-dot code-dot-green"></div>
+                </div>
+            </div>
+            <div class="code-content">
+                <pre>// Fetch inventory dynamically based on resource selected
+function fetchInventory(resource) {
+    if (resource) {
+        fetch('/get_inventory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ resource: resource }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayInventory(data.inventory);
+            calculateCleaningCharge(data.cleaning_charge);
+            document.getElementById('inventory-section').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching inventory:', error));
+    } else {
+        document.getElementById('inventory-section').style.display = 'none';
+    }
+}
+
+// Calculate and display cleaning charge based on selected resource and booking duration
+function calculateCleaningCharge(dailyCharge) {
+    const startDate = new Date(document.getElementById('start_date').value);
+    const endDate = new Date(document.getElementById('end_date').value);
+
+    if (!isNaN(startDate) && !isNaN(endDate)) {
+        const timeDiff = endDate - startDate;
+        const daysBooked = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+        const totalCleaningCharge = daysBooked * dailyCharge;
+
+        document.getElementById('cleaning-charge').textContent = 
+            `Cleaning Charge: €${totalCleaningCharge}`;
+        document.getElementById('cleaning-charge-input').value = totalCleaningCharge;
+    } else {
+        document.getElementById('cleaning-charge').textContent = "Cleaning Charge: N/A";
+        document.getElementById('cleaning-charge-input').value = 0;
+    }
+}</pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Architecture Section -->
+<section class="architecture-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>System Architecture</h2>
+            <p>High-level design of the Room Booking application</p>
+        </div>
+        
+        <div class="architecture-card">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" class="architecture-diagram">
+                            <!-- Background -->
+                            <rect x="0" y="0" width="800" height="400" fill="#1e293b" rx="12" />
+                            
+                            <!-- Layers -->
+                            <!-- Presentation Layer -->
+                            <rect x="50" y="70" width="700" height="70" fill="#334155" rx="8" />
+                            <text x="400" y="50" text-anchor="middle" fill="#94a3b8" font-weight="bold">Presentation Layer</text>
+                            <rect x="70" y="85" width="120" height="40" fill="#1e40af" rx="6" />
+                            <text x="130" y="110" text-anchor="middle" fill="#e2e8f0">HTML/Jinja</text>
+                            <rect x="210" y="85" width="120" height="40" fill="#1e40af" rx="6" />
+                            <text x="270" y="110" text-anchor="middle" fill="#e2e8f0">Bootstrap</text>
+                            <rect x="350" y="85" width="120" height="40" fill="#1e40af" rx="6" />
+                            <text x="410" y="110" text-anchor="middle" fill="#e2e8f0">CSS</text>
+                            <rect x="490" y="85" width="120" height="40" fill="#1e40af" rx="6" />
+                            <text x="550" y="110" text-anchor="middle" fill="#e2e8f0">JavaScript</text>
+                            <rect x="630" y="85" width="100" height="40" fill="#1e40af" rx="6" />
+                            <text x="680" y="110" text-anchor="middle" fill="#e2e8f0">Syncfusion</text>
+                            
+                            <!-- Application Layer -->
+                            <rect x="50" y="170" width="700" height="70" fill="#334155" rx="8" />
+                            <text x="400" y="160" text-anchor="middle" fill="#94a3b8" font-weight="bold">Application Layer</text>
+                            <rect x="70" y="185" width="150" height="40" fill="#0e7490" rx="6" />
+                            <text x="145" y="210" text-anchor="middle" fill="#e2e8f0">Flask Controllers</text>
+                            <rect x="240" y="185" width="150" height="40" fill="#0e7490" rx="6" />
+                            <text x="315" y="210" text-anchor="middle" fill="#e2e8f0">Authentication</text>
+                            <rect x="410" y="185" width="150" height="40" fill="#0e7490" rx="6" />
+                            <text x="485" y="210" text-anchor="middle" fill="#e2e8f0">Business Logic</text>
+                            <rect x="580" y="185" width="150" height="40" fill="#0e7490" rx="6" />
+                            <text x="655" y="210" text-anchor="middle" fill="#e2e8f0">Email Service</text>
+                            
+                            <!-- Data Layer -->
+                            <rect x="50" y="270" width="700" height="70" fill="#334155" rx="8" />
+                            <text x="400" y="260" text-anchor="middle" fill="#94a3b8" font-weight="bold">Data Layer</text>
+                            <rect x="70" y="285" width="200" height="40" fill="#065f46" rx="6" />
+                            <text x="170" y="310" text-anchor="middle" fill="#e2e8f0">SQLAlchemy ORM</text>
+                            <rect x="290" y="285" width="200" height="40" fill="#065f46" rx="6" />
+                            <text x="390" y="310" text-anchor="middle" fill="#e2e8f0">Database Models</text>
+                            <rect x="510" y="285" width="220" height="40" fill="#065f46" rx="6" />
+                            <text x="620" y="310" text-anchor="middle" fill="#e2e8f0">PostgreSQL Database</text>
+                            
+                            <!-- Connecting Lines -->
+                            <line x1="400" y1="140" x2="400" y2="170" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5" />
+                            <line x1="400" y1="240" x2="400" y2="270" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="feature-technical-card">
+                        <div class="feature-technical-header">
+                            <div class="feature-technical-icon">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <div class="feature-technical-title">
+                                <h3>Presentation Layer</h3>
+                                <span>Frontend Implementation</span>
+                            </div>
+                        </div>
+                        <p>Implements responsive UI with Bootstrap 5 and custom CSS. Templates use Jinja2 for server-side rendering with template inheritance. Interactive components built with vanilla JavaScript and Syncfusion JS library.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-technical-card">
+                        <div class="feature-technical-header">
+                            <div class="feature-technical-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="feature-technical-title">
+                                <h3>Application Layer</h3>
+                                <span>Backend Controllers</span>
+                            </div>
+                        </div>
+                        <p>Built with Flask framework to handle routing, form processing, and business logic. Implements secure authentication with Flask-Login, CSRF protection, and permission-based access control. Features RESTful API endpoints for dynamic data fetching.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-technical-card">
+                        <div class="feature-technical-header">
+                            <div class="feature-technical-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="feature-technical-title">
+                                <h3>Data Layer</h3>
+                                <span>Database & ORM</span>
+                            </div>
+                        </div>
+                        <p>Uses SQLAlchemy ORM for object-relational mapping with clearly defined models. Implements relationships between entities with foreign keys constraints. Employs database migrations for schema changes and version control.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Database Schema Section -->
+<section class="database-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Database Schema</h2>
+            <p>Relational database design with entity relationships</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table-relation-card">
+                    <h4><i class="fas fa-table"></i> Users</h4>
+                    <ul>
+                        <li><span><i class="fas fa-key primary-key"></i>id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>username</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>email</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>password_hash</span> <span class="field-type">VARCHAR(256)</span></li>
+                        <li><span>role</span> <span class="field-type">VARCHAR(20)</span></li>
+                        <li><span>is_active</span> <span class="field-type">BOOLEAN</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="table-relation-card">
+                    <h4><i class="fas fa-table"></i> Resources</h4>
+                    <ul>
+                        <li><span><i class="fas fa-key primary-key"></i>id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>name</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>capacity</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>cleaning_charge</span> <span class="field-type">FLOAT</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="table-relation-card">
+                    <h4><i class="fas fa-table"></i> Bookings</h4>
+                    <ul>
+                        <li><span><i class="fas fa-key primary-key"></i>id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>booking_number</span> <span class="field-type">VARCHAR(10)</span></li>
+                        <li><span>first_name</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>last_name</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>email</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>event_title</span> <span class="field-type">VARCHAR(200)</span></li>
+                        <li><span>start_date</span> <span class="field-type">DATE</span></li>
+                        <li><span>end_date</span> <span class="field-type">DATE</span></li>
+                        <li><span><i class="fas fa-key foreign-key"></i>resource_id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>cleaning_charge</span> <span class="field-type">FLOAT</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="table-relation-card">
+                    <h4><i class="fas fa-table"></i> Inventory</h4>
+                    <ul>
+                        <li><span><i class="fas fa-key primary-key"></i>id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>name</span> <span class="field-type">VARCHAR(100)</span></li>
+                        <li><span>max_quantity</span> <span class="field-type">INTEGER</span></li>
+                        <li><span><i class="fas fa-key foreign-key"></i>resource_id</span> <span class="field-type">INTEGER</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="table-relation-card">
+                    <h4><i class="fas fa-table"></i> BookingInventory</h4>
+                    <ul>
+                        <li><span><i class="fas fa-key primary-key"></i>id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span><i class="fas fa-key foreign-key"></i>booking_id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span><i class="fas fa-key foreign-key"></i>inventory_id</span> <span class="field-type">INTEGER</span></li>
+                        <li><span>quantity</span> <span class="field-type">INTEGER</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technical Features Section -->
+<section class="features-technical-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Technical Features</h2>
+            <p>Key programming challenges and their implementations</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>Authentication System</h3>
+                            <span>Security Implementation</span>
+                        </div>
+                    </div>
+                    <p>Implemented secure user authentication with password hashing using Flask-Login and Werkzeug security. Role-based access control ensures that regular users and administrators have appropriate permissions. CSRF protection implemented on all forms.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>Calendar Integration</h3>
+                            <span>Interactive Scheduling</span>
+                        </div>
+                    </div>
+                    <p>Advanced calendar functionality using Syncfusion JavaScript library with server-side event population. Implements conflict detection algorithm to prevent double bookings and ensure resource availability. Features dynamic rendering of events with color coding.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>Email Notification System</h3>
+                            <span>Automated Communications</span>
+                        </div>
+                    </div>
+                    <p>Designed email notification system with HTML templates for booking confirmations, modifications, and cancellations. Integrated with SMTP service for reliable delivery. Implements asynchronous sending to prevent UI blocking during email operations.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-paint-roller"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>Theming System</h3>
+                            <span>Dynamic Styling</span>
+                        </div>
+                    </div>
+                    <p>Implemented a CSS variable-based theming system that enables consistent styling across the application. Created modular SCSS architecture with component-specific styles. Responsive design works on mobile, tablet, and desktop viewports.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>Admin Dashboard</h3>
+                            <span>Data Visualization</span>
+                        </div>
+                    </div>
+                    <p>Built comprehensive admin interface with usage analytics and resource management tools. Dynamic data visualization displays booking trends and resource utilization. CRUD operations for users, resources, and inventory management.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="feature-technical-card">
+                    <div class="feature-technical-header">
+                        <div class="feature-technical-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="feature-technical-title">
+                            <h3>RESTful API</h3>
+                            <span>Backend Services</span>
+                        </div>
+                    </div>
+                    <p>Designed RESTful API endpoints for asynchronous data fetching and state management. Implements JSON responses for inventory fetching, booking validation, and calendar data. Features proper error handling and status codes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Documentation Section -->
+<section class="api-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>API Endpoints</h2>
+            <p>RESTful services powering dynamic functionality</p>
+        </div>
+        
+        <div class="api-card">
+            <div class="api-endpoint">
+                <div class="api-endpoint-header">
+                    <span class="api-method api-method-post">POST</span>
+                    <span class="api-path">/get_inventory</span>
+                </div>
+                <div class="api-description">
+                    Fetches available inventory items for a specific resource along with cleaning charge information.
+                </div>
+                <div class="api-parameters">
+                    <h5>Request Parameters:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">resource</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">The name of the resource to fetch inventory for</span>
+                        </li>
+                    </ul>
+                    <h5 class="mt-3">Response:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">inventory</span>
+                            <span class="api-param-type">array</span>
+                            <span class="api-param-desc">List of inventory items with name, max_quantity</span>
+                        </li>
+                        <li>
+                            <span class="api-param-name">cleaning_charge</span>
+                            <span class="api-param-type">float</span>
+                            <span class="api-param-desc">Daily cleaning charge for the resource</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-endpoint-header">
+                    <span class="api-method api-method-get">GET</span>
+                    <span class="api-path">/get_bookings</span>
+                </div>
+                <div class="api-description">
+                    Returns all bookings formatted for calendar display with appropriate color coding.
+                </div>
+                <div class="api-parameters">
+                    <h5>Response:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">Array of events</span>
+                            <span class="api-param-type">array</span>
+                            <span class="api-param-desc">Calendar events with Id, Subject, StartTime, EndTime, IsAllDay, Color</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-endpoint-header">
+                    <span class="api-method api-method-post">POST</span>
+                    <span class="api-path">/submit_form</span>
+                </div>
+                <div class="api-description">
+                    Processes booking form submission and creates a new booking in the database.
+                </div>
+                <div class="api-parameters">
+                    <h5>Request Parameters:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">first_name</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">First name of the person making the booking</span>
+                        </li>
+                        <li>
+                            <span class="api-param-name">last_name</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">Last name of the person making the booking</span>
+                        </li>
+                        <li>
+                            <span class="api-param-name">email</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">Email address for communications</span>
+                        </li>
+                        <!-- Additional fields omitted for brevity -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-endpoint-header">
+                    <span class="api-method api-method-post">POST</span>
+                    <span class="api-path">/confirm_cancellation/:booking_number</span>
+                </div>
+                <div class="api-description">
+                    Validates cancellation code and processes booking cancellation if valid.
+                </div>
+                <div class="api-parameters">
+                    <h5>URL Parameters:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">booking_number</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">Unique identifier for the booking</span>
+                        </li>
+                    </ul>
+                    <h5 class="mt-3">Request Parameters:</h5>
+                    <ul>
+                        <li>
+                            <span class="api-param-name">cancellation_code</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">Security code sent via email to confirm cancellation</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Challenges Section -->
+<section class="tech-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Development Challenges</h2>
+            <p>Technical problems encountered and their solutions</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="tech-card">
+                    <h3>Preventing Double Bookings</h3>
+                    <p>Implemented a custom validation algorithm that checks for overlapping time slots when users attempt to book a resource. Created database queries with date range constraints to identify conflicts before allowing new bookings.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="tech-card">
+                    <h3>Dynamic Inventory Management</h3>
+                    <p>Designed a dynamic form system that loads available inventory items based on the selected resource. Implemented JavaScript fetch API for asynchronous data loading and form updates without page reloads.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="tech-card">
+                    <h3>Secure Booking Modification</h3>
+                    <p>Created a multi-step verification process for booking modifications and cancellations to prevent unauthorized changes. Implemented unique cancellation codes delivered via email for secure verification.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="tech-card">
+                    <h3>Calendar Rendering Performance</h3>
+                    <p>Optimized calendar data loading to handle large numbers of bookings without performance degradation. Implemented lazy loading and pagination of event data with asynchronous updates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Future Enhancements Section -->
+<section class="tech-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Future Technical Enhancements</h2>
+            <p>Planned improvements to the codebase</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Progressive Web App</h3>
+                    <p>Converting the application to a PWA with service workers for offline capabilities and push notifications. This will enhance mobile usability and provide a more app-like experience.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>GraphQL API</h3>
+                    <p>Implementing a GraphQL API to replace multiple RESTful endpoints, allowing more efficient data fetching with reduced overhead and more flexible querying capabilities.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>Containerization</h3>
+                    <p>Moving to a fully containerized deployment using Docker with Kubernetes orchestration for better scalability, resource management, and simplified deployment workflows.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

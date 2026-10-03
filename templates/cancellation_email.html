@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { margin: 20px auto; padding: 20px; max-width: 600px; background-color: #f9f9f9; border: 1px solid #ddd; }
+        h2 { color: #007bff; }
+        p { font-size: 16px; }
+        .footer { text-align: center; padding-top: 20px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Booking Has Been Canceled</h2>
+        <p>Dear {{ first_name }} {{ last_name }},</p>
+        <p>We regret to inform you that your booking has been canceled. Below are the details of the canceled booking:</p>
+        <h3>Canceled Booking Details:</h3>
+        <ul>
+            <li><strong>Event Title:</strong> {{ event_title }}</li>
+            <li><strong>Resource:</strong> {{ selected_resource }}</li>
+            <li><strong>Start Date:</strong> {{ start_date }}</li>
+            <li><strong>End Date:</strong> {{ end_date }}</li>
+            <li><strong>Booking Number:</strong> {{ booking_number }}</li>
+        </ul>
+        <div class="footer">
+            <p>If you have any further inquiries, please contact us.</p>
+            <p>Best regards, <br>The Team</p>
+        </div>
+    </div>
+</body>
+</html>

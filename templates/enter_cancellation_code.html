@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Enter Cancellation Code{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cancellation-card {
+        max-width: 500px;
+        margin: 3rem auto;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+    }
+    
+    .cancellation-header {
+        background-color: #e03131;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .cancellation-header h1 {
+        color: white;
+        margin: 0;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .cancellation-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background-color: var(--card-bg);
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+    }
+    
+    .cancellation-body {
+        padding: 2rem;
+    }
+    
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+        font-size: 1.2rem;
+        text-align: center;
+        letter-spacing: 0.5rem;
+    }
+    
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: #e03131;
+        box-shadow: 0 0 0 3px rgba(224, 49, 49, 0.25);
+        color: var(--text-primary);
+    }
+    
+    .cancellation-icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cancellation-icon i {
+        font-size: 3.5rem;
+        color: #e03131;
+        opacity: 0.8;
+    }
+    
+    .btn-cancel {
+        background-color: #e03131;
+        border-color: #e03131;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #c92a2a;
+        border-color: #c92a2a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(224, 49, 49, 0.4);
+    }
+    
+    .cancellation-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+    }
+    
+    .btn-back {
+        color: var(--text-secondary);
+        background-color: transparent;
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+    }
+    
+    .btn-back:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+    }
+    
+    .alert-danger {
+        background-color: rgba(224, 49, 49, 0.1);
+        color: #ff6b6b;
+        border: 1px solid rgba(224, 49, 49, 0.2);
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    
+    .cancellation-info {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .booking-number {
+        background-color: rgba(224, 49, 49, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-family: monospace;
+        color: #ff6b6b;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cancellation-card">
+    <div class="cancellation-header">
+        <h1>Cancel Booking</h1>
+    </div>
+    
+    <div class="cancellation-body">
+        <div class="cancellation-icon">
+            <i class="fas fa-calendar-times"></i>
+        </div>
+        
+        <div class="cancellation-info">
+            <p>You are about to cancel booking: <span class="booking-number">{{ booking_number }}</span></p>
+            <p>Please enter the cancellation code that was sent to your email address to confirm.</p>
+        </div>
+
+        {% if error_message %}
+            <div class="alert alert-danger mb-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> {{ error_message }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('confirm_cancellation', booking_number=booking_number) }}">
+            <div class="mb-4">
+                <label for="cancellation_code" class="form-label">Cancellation Code</label>
+                <input type="text" class="form-control" id="cancellation_code" name="cancellation_code" required>
+            </div>
+            
+            <div class="cancellation-footer">
+                <a href="{{ url_for('retrieve_booking') }}" class="btn btn-back">
+                    <i class="fas fa-arrow-left me-2"></i> Go Back
+                </a>
+                
+                <button type="submit" class="btn btn-cancel">
+                    <i class="fas fa-times-circle me-2"></i> Confirm Cancellation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
